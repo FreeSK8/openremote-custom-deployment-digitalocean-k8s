@@ -34,8 +34,8 @@ node_modules/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.terraform
 .terragrunt-cache
-.terraform.lock.hcl
 
 # Specific files and logs
 openremote.log

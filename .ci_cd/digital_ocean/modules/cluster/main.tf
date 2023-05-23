@@ -6,8 +6,18 @@ resource "digitalocean_kubernetes_cluster" "primary" {
 
   node_pool {
     name       = "shared"
-    size       = "s-2vcpu-2gb"
+    size       = "s-1vcpu-2gb"
     node_count = var.node_count
+  }
+}
+
+resource "kubernetes_namespace" "backend" {
+  metadata {
+    labels = {
+      service_namespace = "backend"
+    }
+
+    name = "backend"
   }
 }
 
@@ -16,5 +26,5 @@ resource "digitalocean_project" "k8s" {
   description = var.description
   purpose     = "Web Application"
   environment = var.environment
-  resources   = [digitalocean_kubernetes_cluster.primary.urn]
+  resources   = [digitalocean_kubernetes_cluster.primary.urn, ]
 }
