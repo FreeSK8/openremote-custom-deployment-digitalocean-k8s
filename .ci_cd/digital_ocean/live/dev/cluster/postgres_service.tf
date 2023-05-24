@@ -8,7 +8,6 @@ resource "kubernetes_service" "postgresql" {
   }
   
   spec {
-    
     selector = {
       app = "pgsql"
     }

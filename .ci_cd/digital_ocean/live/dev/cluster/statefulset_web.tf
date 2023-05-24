@@ -2,7 +2,7 @@
 resource "kubernetes_stateful_set" "web" {
   metadata {
     name = "web"
-    namespace = "backend"
+    namespace = "default"
   }
   spec {
     replicas = 1

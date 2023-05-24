@@ -4,7 +4,7 @@ resource "kubernetes_service" "web" {
       app = "web"
     }
     name = "web"
-    namespace = "backend"
+    namespace = "default"
   }
   
   spec {

@@ -58,24 +58,39 @@ docker push registry.digitalocean.com/sk8net/openremote/custom-deployment
 
 We use [terragrunt](https://blog.gruntwork.io/how-to-manage-multiple-environments-with-terraform-using-terragrunt-2c3e32fc60a8) to manage k8s deployments using environment based configs.
 
-#### Create/update kubernetes fabric, load balancer for dev
+#### Create/update kubernetes fabric in staging env
 ```sh
 cd .ci_cd/digital_ocean/live/dev/cluster
-terragrunt apply
+terragrunt apply -target=digitalocean_kubernetes_cluster.primary
 ```
 
-The first time you run the above, it will create a new k8s cluster. You will see errors for the other k8s resources because the control
-plane config is not yet set locally. To set it, run this once for your env/cluster, and then run the apply command again:
+Set control plane config locally, run this once for your env/cluster:
 ```sh
 doctl kubernetes cluster kubeconfig save shared-dev
 ```
 ~Use this command to switch k8s config between clusters when working with different environments
 
-#### Add the load balancer (dev) (not managed by terraform)
+#### Apply terraform configs:
 ```sh
 cd .ci_cd/digital_ocean/live/dev/cluster
-kubectl apply -f load_balancer.yml
+terragrunt apply
 ```
+
+##### Set up a self-signed certificate and add to digital ocean:
+```sh
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.out -out cert.out -subj "/CN=stage.ride.sk8net.org/O=stage.ride.sk8net.org" -addext "subjectAltName = DNS:146.190.198.74"
+kubectl create secret tls dev-selfsigned --key key.out --cert cert.out
+```
+
+##### Install nginx-ingress via helm (do this once after creating k8s fabric)
+**This resource is managed separately from the rest of our infra-as-code which is generally all in terraform.**
+My understanding is this makes the ingress container image available to use in our kubernetes fabric.
+```sh
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
+```
+
 
 #### Remove state for already-deprovisioned resources, or if you want to detach existing resource from tf management
 ```sh
@@ -83,3 +98,4 @@ terragrunt state list
 
 terragrunt state rm kubernetes_persistent_volume_claim.proxy_data # THIS IS AN EXAMPLE, target your desired resource
 ```
+
