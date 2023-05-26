@@ -40,7 +40,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "KC_HOSTNAME"
-            value = "stage.ride.sk8net.org"
+            value = var.frontend_hostname
           }
           env {
             name = "KC_HOSTNAME_PATH"
@@ -48,7 +48,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "KC_HOSTNAME_ADMIN_URL"
-            value = "https://stage.ride.sk8net.org/auth/admin"
+            value = "https://${var.frontend_hostname}/auth/admin"
           }
           env {
             name = "KC_DB_URL_HOST"
@@ -96,7 +96,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "OR_HOSTNAME"
-            value = "stage.ride.sk8net.org"
+            value = var.frontend_hostname
           }
           env {
             name = "OR_SSL_PORT"

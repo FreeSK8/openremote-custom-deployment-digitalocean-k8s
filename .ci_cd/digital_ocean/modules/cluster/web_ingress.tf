@@ -19,7 +19,7 @@ resource "kubernetes_ingress_v1" "sk8net" {
     }
 
     rule {
-      host = "stage.ride.sk8net.org"
+      host = var.frontend_hostname
       
       http {
         path {

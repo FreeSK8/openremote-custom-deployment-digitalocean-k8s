@@ -10,6 +10,8 @@ terraform {
 variable "do_token" {}
 variable "pvt_key" {}
 
+variable "frontend_hostname" {}
+
 provider "digitalocean" {
   token = var.do_token
 }
