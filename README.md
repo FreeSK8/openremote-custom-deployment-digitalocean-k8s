@@ -70,42 +70,25 @@ doctl kubernetes cluster kubeconfig save shared-dev
 ```
 ~Use this command to switch k8s config between clusters when working with different environments
 
-Now create ingress namespace:
+Now create ingress namespace, and install our custom helm chart for nginx-ingress:
 ```sh
 cd .ci_cd/digital_ocean/live/dev/cluster
 terragrunt apply -target=kubernetes_namespace.ingress
+terragrunt apply -target=helm_release.nginx
 ```
 
-And install the helm chart for our target ingress of nginx
-```sh
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-NGINX_CHART_VERSION="4.6.1"
-helm install ingress-nginx ingress-nginx/ingress-nginx --version "$NGINX_CHART_VERSION" \
-  --namespace ingress \
-  -f "nginx-values-v${NGINX_CHART_VERSION}.yaml" --set controller.publishService.enabled=true
-
-# once installed you can update settings live:
-helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --version "$NGINX_CHART_VERSION" \
-  --namespace ingress \
-  -f "nginx-values-v${NGINX_CHART_VERSION}.yaml" --set controller.publishService.enabled=true
-```
-^ you can verify this worked, visit k8s dashboard under Service > Ingress Classes
-
-Set up a self-signed certificate and add to digital ocean:
-```sh
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.out -out cert.out -subj "/CN=stage.ride.sk8net.org/O=stage.ride.sk8net.org" -addext "subjectAltName = DNS:146.190.198.74"
-kubectl create secret tls dev-selfsigned --key key.out --cert cert.out
-```
-
-#### Apply terraform configs:
+#### Apply all remaining infrstructure terraform config deltas (you'll do this often when changing them):
 ```sh
 cd .ci_cd/digital_ocean/live/dev/cluster
 terragrunt apply
 ```
 
-
-
+#### If a cluster is nuked and volumes are left orphaned, you can import them:
+```sh
+terragrunt import digitalocean_volume.deployment_data #(id available on inspection of the html table in DO volumes manager, lol)
+terragrunt import digitalocean_volume.manager_data #(id)
+terragrunt import digitalocean_volume.postgresql_data #(id)
+```
 
 #### Remove state for already-deprovisioned resources, or if you want to detach existing resource from tf management
 ```sh

@@ -11,6 +11,8 @@ variable "do_token" {}
 variable "pvt_key" {}
 
 variable "frontend_hostname" {}
+variable "certificate_id" {}
+variable "loadbalancer_friendly_name" {}
 
 provider "digitalocean" {
   token = var.do_token

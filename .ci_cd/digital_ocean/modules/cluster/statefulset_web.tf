@@ -19,6 +19,19 @@ resource "kubernetes_stateful_set" "web" {
         }
       }
       spec {
+        init_container {
+          name = "mounts-perms-fix"
+          image = "busybox"
+          command = ["/bin/sh", "-c", "/bin/mkdir -p /deployment/manager && /bin/chmod -R 777 /deployment && /bin/chmod -R 777 /storage"]
+          volume_mount {
+            mount_path = "/deployment"
+            name = "deployment-data"
+          }
+          volume_mount {
+            mount_path = "/storage"
+            name = "manager-data"
+          }
+        }  
         container {
           image = "openremote/keycloak:latest"
           name = "keycloak"
@@ -48,7 +61,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "KC_HOSTNAME_ADMIN_URL"
-            value = "https://${var.frontend_hostname}/auth/admin"
+            value = "https://${var.frontend_hostname}/auth"
           }
           env {
             name = "KC_DB_URL_HOST"
@@ -86,6 +99,14 @@ resource "kubernetes_stateful_set" "web" {
             container_port = 8883
             name = "mqtt"
           }
+          volume_mount {
+            mount_path = "/storage"
+            name = "manager-data"
+          }
+          volume_mount {
+            mount_path = "/deployment"
+            name = "deployment-data"
+          }
           env {
             name = "OR_DB_HOST"
             value = "postgresql.backend"
@@ -107,16 +128,12 @@ resource "kubernetes_stateful_set" "web" {
             value = "8090"
           }
           env {
-            name = "OR_MAP_TILES_PATH"
-            value = "/efs/europe.mbtiles"
-          }
-          env {
             name = "OR_DEV_MODE"
             value = 0
           }
           env {
             name = "KEYCLOAK_AUTH_PATH"
-            value = ""
+            value = "auth"
           }
           env {
             name = "OR_KEYCLOAK_HOST"

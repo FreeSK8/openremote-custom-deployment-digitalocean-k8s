@@ -9,4 +9,6 @@ inputs = {
   environment = "Development"
   node_count = 2
   frontend_hostname = "stage.ride.sk8net.org"
+  loadbalancer_friendly_name = "stage-fronted-proxy-sk8net"
+  certificate_id = "915fb6b1-3371-4463-b5b0-44ea4cad5fa3"
 }
