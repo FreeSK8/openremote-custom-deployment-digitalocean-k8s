@@ -1,0 +1,35 @@
+## Stack name: ingress-nginx/ingress-nginx
+## Ref: https://github.com/kubernetes/ingress-nginx/tree/helm-chart-4.0.13/charts/ingress-nginx/
+##
+
+controller:
+  # A replica count of minimum 2 ensures high availability for NGINX ingress main application Pods
+  replicaCount: 2
+  service:
+    type: LoadBalancer
+    annotations:
+      # Enable proxy protocol.
+      service.beta.kubernetes.io/do-loadbalancer-certificate-id: 915fb6b1-3371-4463-b5b0-44ea4cad5fa3
+      service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
+      service.beta.kubernetes.io/do-loadbalancer-hostname: stage.ride.sk8net.org
+      service.beta.kubernetes.io/do-loadbalancer-name: stage-fronted-proxy-sk8net
+      service.beta.kubernetes.io/do-loadbalancer-protocol: https
+      service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: 'true'
+      service.beta.kubernetes.io/do-loadbalancer-tls-passthrough: 'false'
+      service.beta.kubernetes.io/do-loadbalancer-disable-lets-encrypt-dns-records: 'true'
+    targetPorts:
+      https: 80
+
+  config:
+    use-proxy-protocol: "true"
+
+  ## Enable the metrics of the NGINX ingress controller https://kubernetes.github.io/ingress-nginx/user-guide/monitoring/
+  metrics:
+    enabled: true
+  podAnnotations:
+    controller:
+      metrics:
+        service:
+          servicePort: "9090"
+    prometheus.io/port: "10254"
+    prometheus.io/scrape: "true"

@@ -20,10 +20,6 @@ resource "kubernetes_service" "web" {
       name = "http-manager"
     }
     port {
-      port = 443
-      name = "https"
-    }
-    port {
       port = 8883
       name = "mqtt"
     }

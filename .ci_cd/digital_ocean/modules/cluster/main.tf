@@ -6,7 +6,7 @@ resource "digitalocean_kubernetes_cluster" "primary" {
 
   node_pool {
     name       = "shared"
-    size       = "s-1vcpu-2gb"
+    size       = "s-2vcpu-2gb"
     node_count = var.node_count
   }
 }
@@ -21,10 +21,12 @@ resource "kubernetes_namespace" "backend" {
   }
 }
 
-resource "digitalocean_project" "k8s" {
-  name        = var.project_name
-  description = var.description
-  purpose     = "Web Application"
-  environment = var.environment
-  resources   = [digitalocean_kubernetes_cluster.primary.urn, ]
+resource "kubernetes_namespace" "ingress" {
+  metadata {
+    labels = {
+      service_namespace = "ingress"
+    }
+
+    name = "ingress"
+  }
 }

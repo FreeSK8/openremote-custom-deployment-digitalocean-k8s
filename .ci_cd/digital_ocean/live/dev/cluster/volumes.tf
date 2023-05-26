@@ -2,7 +2,6 @@ resource "digitalocean_volume" "postgresql_data" {
   region                  = "nyc1"
   name                    = "postgresql-data"
   size                    = 5
-  initial_filesystem_type = "ext4"
   description             = "Kubernetes storage volume for pgsql"
 }
 
@@ -38,7 +37,6 @@ resource "digitalocean_volume" "manager_data" {
   region                  = "nyc1"
   name                    = "manager-data"
   size                    = 5
-  initial_filesystem_type = "ext4"
   description             = "Kubernetes storage volume for openremote manager"
 }
 
@@ -54,7 +52,7 @@ resource "kubernetes_persistent_volume" "manager_data" {
       storage = "5Gi"
     }
     access_modes = [
-      "ReadWriteMany",
+      "ReadWriteOnce",
     ]
     storage_class_name = "do-block-storage"
     persistent_volume_source {
@@ -74,7 +72,6 @@ resource "digitalocean_volume" "deployment_data" {
   region                  = "nyc1"
   name                    = "deployment-data"
   size                    = 5
-  initial_filesystem_type = "ext4"
   description             = "Kubernetes storage volume for keycloak"
 }
 
@@ -91,7 +88,7 @@ resource "kubernetes_persistent_volume" "deployment_data" {
     }
     storage_class_name = "do-block-storage"
     access_modes = [
-      "ReadWriteMany",
+      "ReadWriteOnce",
     ]
     persistent_volume_source {
       csi {

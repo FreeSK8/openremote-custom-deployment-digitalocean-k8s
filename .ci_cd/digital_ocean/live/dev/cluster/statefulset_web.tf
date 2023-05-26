@@ -26,10 +26,6 @@ resource "kubernetes_stateful_set" "web" {
             container_port = 8080
             name = "http-keycloak"
           }
-          port {
-            container_port = 8081
-            name = "https-keycloak"
-          }
           volume_mount {
             mount_path = "/deployment"
             name = "deployment-data"
@@ -47,8 +43,12 @@ resource "kubernetes_stateful_set" "web" {
             value = "stage.ride.sk8net.org"
           }
           env {
+            name = "KC_HOSTNAME_PATH"
+            value = "auth"
+          }
+          env {
             name = "KC_HOSTNAME_ADMIN_URL"
-            value = "https://stage.ride.sk8net.org/auth"
+            value = "https://stage.ride.sk8net.org/auth/admin"
           }
           env {
             name = "KC_DB_URL_HOST"
@@ -56,7 +56,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "KC_HOSTNAME_STRICT_HTTPS"
-            value = "false"
+            value = "true"
           }
           env {
             name = "KC_PROXY"
@@ -66,9 +66,13 @@ resource "kubernetes_stateful_set" "web" {
             name = "KC_DB_URL"
             value = "jdbc:postgresql://postgresql.backend:5432/openremote?currentSchema=public"
           }
+          env {
+            name = "PROXY_ADDRESS_FORWARDING"
+            value = "true"
+          }
         }
         container {
-          image = "openremote/manager:latest"
+          image = "registry.digitalocean.com/sk8net/openremote/manager:may25test00"
           name = "manager"
           port {
             container_port = 8090
@@ -81,14 +85,6 @@ resource "kubernetes_stateful_set" "web" {
           port {
             container_port = 8883
             name = "mqtt"
-          }
-          volume_mount {
-            mount_path = "/storage"
-            name = "manager-data"
-          }
-          volume_mount {
-            mount_path = "/deployment"
-            name = "deployment-data"
           }
           env {
             name = "OR_DB_HOST"
@@ -104,7 +100,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "OR_SSL_PORT"
-            value = "8443"
+            value = "-1"
           }
           env {
             name = "OR_WEBSERVER_LISTEN_PORT"
@@ -140,7 +136,7 @@ resource "kubernetes_stateful_set" "web" {
       }
       spec {
         access_modes = [
-          "ReadWriteMany",
+          "ReadWriteOnce",
         ]
         volume_name = "deployment-data"
         resources {
@@ -158,7 +154,7 @@ resource "kubernetes_stateful_set" "web" {
       spec {
         volume_name = "manager-data"
         access_modes = [
-          "ReadWriteMany",
+          "ReadWriteOnce",
         ]
         resources {
           requests = {

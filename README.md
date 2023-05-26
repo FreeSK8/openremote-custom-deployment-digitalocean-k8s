@@ -70,26 +70,41 @@ doctl kubernetes cluster kubeconfig save shared-dev
 ```
 ~Use this command to switch k8s config between clusters when working with different environments
 
+Now create ingress namespace:
+```sh
+cd .ci_cd/digital_ocean/live/dev/cluster
+terragrunt apply -target=kubernetes_namespace.ingress
+```
+
+And install the helm chart for our target ingress of nginx
+```sh
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+NGINX_CHART_VERSION="4.6.1"
+helm install ingress-nginx ingress-nginx/ingress-nginx --version "$NGINX_CHART_VERSION" \
+  --namespace ingress \
+  -f "nginx-values-v${NGINX_CHART_VERSION}.yaml" --set controller.publishService.enabled=true
+
+# once installed you can update settings live:
+helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx --version "$NGINX_CHART_VERSION" \
+  --namespace ingress \
+  -f "nginx-values-v${NGINX_CHART_VERSION}.yaml" --set controller.publishService.enabled=true
+```
+^ you can verify this worked, visit k8s dashboard under Service > Ingress Classes
+
+Set up a self-signed certificate and add to digital ocean:
+```sh
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.out -out cert.out -subj "/CN=stage.ride.sk8net.org/O=stage.ride.sk8net.org" -addext "subjectAltName = DNS:146.190.198.74"
+kubectl create secret tls dev-selfsigned --key key.out --cert cert.out
+```
+
 #### Apply terraform configs:
 ```sh
 cd .ci_cd/digital_ocean/live/dev/cluster
 terragrunt apply
 ```
 
-##### Set up a self-signed certificate and add to digital ocean:
-```sh
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout key.out -out cert.out -subj "/CN=stage.ride.sk8net.org/O=stage.ride.sk8net.org" -addext "subjectAltName = DNS:146.190.198.74"
-kubectl create secret tls dev-selfsigned --key key.out --cert cert.out
-```
 
-##### Install nginx-ingress via helm (do this once after creating k8s fabric)
-**This resource is managed separately from the rest of our infra-as-code which is generally all in terraform.**
-My understanding is this makes the ingress container image available to use in our kubernetes fabric.
-```sh
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-helm repo update
-helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
-```
 
 
 #### Remove state for already-deprovisioned resources, or if you want to detach existing resource from tf management
