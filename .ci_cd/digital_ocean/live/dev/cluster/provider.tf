@@ -11,15 +11,13 @@ terraform {
     skip_metadata_api_check     = true
     endpoint                    = "https://nyc3.digitaloceanspaces.com"
     region                      = "us-east-1" // needed
-    bucket                      = "sk8net-secrets-stage" // name of your space
+    bucket                      = "sk8net-terraform-states" // name of your space
     key                         = "infrastructure/terraform.tfstate"
   }
 }
 
 provider "digitalocean" {
   token = var.do_token
-  spaces_access_id  = var.spaces_access_id
-  spaces_secret_key = var.spaces_secret_key
 }
 
 provider "kubernetes" {

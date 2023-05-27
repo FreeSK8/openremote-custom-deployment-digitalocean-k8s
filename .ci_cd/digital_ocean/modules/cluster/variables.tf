@@ -23,11 +23,28 @@ variable "environment" {
   type        = string
 }
 
-variable "do_token" {}
-variable "pvt_key" {}
+variable "do_token" {
+  description = "digital ocean personal access token for creating/destroying cloud resoures"
+  type        = string
+  sensitive   = true
+}
 
-variable "frontend_hostname" {}
-variable "certificate_id" {}
-variable "loadbalancer_friendly_name" {}
-variable "spaces_access_id" {}
-variable "spaces_secret_key" {}
+variable "pvt_key" {
+  description = "y'alls ssh private key location i.e. ~/.ssh/id_rsa"
+  type        = string
+}
+
+variable "frontend_hostname" {
+  description = "The web dns name of our front end website"
+  type        = string
+}
+
+variable "certificate_id" {
+  description = "The uuid of the DO certificate to use in terminating SSL"
+  type        = string
+}
+
+variable "loadbalancer_friendly_name" {
+  description = "The label for the load balancer"
+  type        = string
+}
