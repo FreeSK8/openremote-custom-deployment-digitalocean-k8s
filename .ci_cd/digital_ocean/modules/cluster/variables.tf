@@ -22,3 +22,12 @@ variable "environment" {
   description = "The environment name"
   type        = string
 }
+
+variable "do_token" {}
+variable "pvt_key" {}
+
+variable "frontend_hostname" {}
+variable "certificate_id" {}
+variable "loadbalancer_friendly_name" {}
+variable "spaces_access_id" {}
+variable "spaces_secret_key" {}
