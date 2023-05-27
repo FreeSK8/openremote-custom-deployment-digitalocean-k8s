@@ -137,7 +137,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "OR_KEYCLOAK_HOST"
-            value = "localhost"
+            value = "web.default"
           }
           env {
             name = "OR_KEYCLOAK_PORT"
