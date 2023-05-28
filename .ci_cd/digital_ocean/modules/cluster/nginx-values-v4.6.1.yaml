@@ -8,16 +8,12 @@ controller:
   service:
     type: LoadBalancer
     annotations:
-      service.beta.kubernetes.io/do-loadbalancer-protocol: https
-      service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: 'true'
+      service.beta.kubernetes.io/do-loadbalancer-protocol: tcp
       service.beta.kubernetes.io/do-loadbalancer-disable-lets-encrypt-dns-records: 'true'
-      service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: 'true'
-      service.beta.kubernetes.io/do-loadbalancer-tls-passthrough: 'false'
-    targetPorts:
-      https: 80
-  
-  config:
-    use-proxy-protocol: "true"
+      service.beta.kubernetes.io/do-loadbalancer-tls-passthrough: 'true'
+
+  publishService:
+    enabled: 'true'
 
   ## Enable the metrics of the NGINX ingress controller https://kubernetes.github.io/ingress-nginx/user-guide/monitoring/
   metrics:
@@ -29,3 +25,6 @@ controller:
           servicePort: "9090"
     prometheus.io/port: "10254"
     prometheus.io/scrape: "true"
+
+tcp:
+  8883: default/web:1883

@@ -5,7 +5,7 @@ resource "kubernetes_ingress_v1" "sk8net" {
     name = "sk8net-web"
     namespace = "default"
   }
-
+  
   spec {
     ingress_class_name = "nginx"
 

@@ -26,12 +26,6 @@ resource "helm_release" "nginx" {
     value = var.loadbalancer_friendly_name
     type  = "string"
   }
-
-  set {
-    name = "controller.publishService.enabled"
-    value = "true"
-    type = "string"
-  }
 }
 
 provider "helm" {

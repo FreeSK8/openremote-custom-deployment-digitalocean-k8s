@@ -92,11 +92,7 @@ resource "kubernetes_stateful_set" "web" {
             name = "http-manager"
           }
           port {
-            container_port = 8443
-            name = "https"
-          }
-          port {
-            container_port = 8883
+            container_port = 1883
             name = "mqtt"
           }
           volume_mount {

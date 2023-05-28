@@ -20,7 +20,7 @@ resource "kubernetes_service" "web" {
       name = "http-manager"
     }
     port {
-      port = 8883
+      port = 1883
       name = "mqtt"
     }
   }
