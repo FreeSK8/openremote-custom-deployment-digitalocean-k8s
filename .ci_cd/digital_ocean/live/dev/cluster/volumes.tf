@@ -102,3 +102,39 @@ resource "kubernetes_persistent_volume" "deployment_data" {
     }
   }
 }
+
+
+resource "digitalocean_volume" "proxy_data" {
+  region                  = "nyc1"
+  name                    = "proxy-data"
+  size                    = 5
+  description             = "Kubernetes storage volume for keycloak"
+}
+
+resource "kubernetes_persistent_volume" "proxy_data" {
+  metadata {
+    labels = {
+      app = "web"
+    }
+    name = "proxy-data"
+  }
+  spec {
+    capacity = {
+      storage = "5Gi"
+    }
+    storage_class_name = "do-block-storage"
+    access_modes = [
+      "ReadWriteOnce",
+    ]
+    persistent_volume_source {
+      csi {
+        driver = "dobs.csi.digitalocean.com"
+        volume_handle = digitalocean_volume.proxy_data.id
+        fs_type = "ext4"
+        volume_attributes = {
+          "com.digitalocean.csi/noformat" = "true"
+        }
+      }
+    }
+  }
+}

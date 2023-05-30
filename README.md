@@ -108,13 +108,6 @@ doctl kubernetes cluster kubeconfig save shared-dev
 ```
 ~Use this command to switch k8s config between clusters when working with different environments
 
-Now create ingress namespace, and install our custom helm chart for nginx-ingress:
-```sh
-cd .ci_cd/digital_ocean/live/dev/cluster
-terragrunt apply -target=kubernetes_namespace.ingress
-terragrunt apply -target=helm_release.nginx
-```
-
 #### Apply all remaining infrstructure terraform config deltas (you'll do this often when changing them):
 ```sh
 cd .ci_cd/digital_ocean/live/dev/cluster

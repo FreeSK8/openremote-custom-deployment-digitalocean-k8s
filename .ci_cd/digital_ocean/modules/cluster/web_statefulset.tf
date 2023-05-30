@@ -3,6 +3,9 @@ resource "kubernetes_stateful_set" "web" {
   metadata {
     name = "web"
     namespace = "default"
+    labels = {
+      pgsql_dependency = kubernetes_stateful_set.pgsql.metadata.0.name
+    }
   }
   spec {
     replicas = 1
@@ -22,16 +25,24 @@ resource "kubernetes_stateful_set" "web" {
         init_container {
           name = "mounts-perms-fix"
           image = "busybox"
-          command = ["/bin/sh", "-c", "/bin/mkdir -p /deployment/manager && /bin/chmod -R 777 /deployment && /bin/chmod -R 777 /storage"]
+          command = [
+            "/bin/sh",
+            "-c",
+            <<-EOT
+              /bin/mkdir -p /deployment/manager && \
+              /bin/chmod -R 777 /deployment && \
+              /bin/chmod -R 777 /manager
+            EOT
+          ]
           volume_mount {
             mount_path = "/deployment"
             name = "deployment-data"
           }
           volume_mount {
-            mount_path = "/storage"
+            mount_path = "/manager"
             name = "manager-data"
           }
-        }  
+        }
         container {
           image = "openremote/keycloak:latest"
           name = "keycloak"

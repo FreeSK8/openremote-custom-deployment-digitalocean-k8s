@@ -2,7 +2,7 @@ resource "digitalocean_kubernetes_cluster" "primary" {
   name   = var.cluster_name
   region = "nyc1"
   # Grab the latest version slug from `doctl kubernetes options versions`
-  version = "1.26.3-do.0"
+  version = "1.27.2-do.0"
 
   node_pool {
     name       = "shared"
@@ -21,12 +21,12 @@ resource "kubernetes_namespace" "backend" {
   }
 }
 
-resource "kubernetes_namespace" "ingress" {
+resource "kubernetes_namespace" "frontend" {
   metadata {
     labels = {
-      service_namespace = "ingress"
+      service_namespace = "frontend"
     }
 
-    name = "ingress"
+    name = "frontend"
   }
 }
