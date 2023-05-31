@@ -1,5 +1,5 @@
 resource "digitalocean_volume" "postgresql_data" {
-  region                  = "nyc1"
+  region                  = var.region
   name                    = "postgresql-data"
   size                    = 5
   description             = "Kubernetes storage volume for pgsql"
@@ -34,7 +34,7 @@ resource "kubernetes_persistent_volume" "postgresql_data" {
 }
 
 resource "digitalocean_volume" "manager_data" {
-  region                  = "nyc1"
+  region                  = var.region
   name                    = "manager-data"
   size                    = 5
   description             = "Kubernetes storage volume for openremote manager"
@@ -69,7 +69,7 @@ resource "kubernetes_persistent_volume" "manager_data" {
 }
 
 resource "digitalocean_volume" "deployment_data" {
-  region                  = "nyc1"
+  region                  = var.region
   name                    = "deployment-data"
   size                    = 5
   description             = "Kubernetes storage volume for keycloak"
@@ -105,7 +105,7 @@ resource "kubernetes_persistent_volume" "deployment_data" {
 
 
 resource "digitalocean_volume" "proxy_data" {
-  region                  = "nyc1"
+  region                  = var.region
   name                    = "proxy-data"
   size                    = 5
   description             = "Kubernetes storage volume for keycloak"

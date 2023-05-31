@@ -89,29 +89,21 @@ docker push registry.digitalocean.com/sk8net/openremote/manager
 
 We use [terragrunt](https://blog.gruntwork.io/how-to-manage-multiple-environments-with-terraform-using-terragrunt-2c3e32fc60a8) to manage k8s deployments using environment based configs. Terraform state is stored in digital ocean spaces (aka S3) under the bucket sk8net-terraform-states.
 
-#### Prepare your command line ENV with exports:
-```sh
-export TF_VAR_do_token=$(pass sk8net/do_token)
-export AWS_ACCESS_KEY_ID=$(pass sk8net/spaces_access_id)
-export AWS_SECRET_ACCESS_KEY=$(pass sk8net/spaces_secret_key)
-```
-
 #### Create/update kubernetes fabric in staging env
 ```sh
 cd .ci_cd/digital_ocean/live/dev/cluster
-terragrunt apply -target=digitalocean_kubernetes_cluster.primary
-```
+export TF_VAR_do_token=$(pass sk8net/do_token)
+export AWS_ACCESS_KEY_ID=$(pass sk8net/spaces_access_id)
+export AWS_SECRET_ACCESS_KEY=$(pass sk8net/spaces_secret_key)
+terragrunt apply -target=digitalocean_kubernetes_cluster.primary 
 
-Set control plane config locally, run this once for your env/cluster:
-```sh
 doctl kubernetes cluster kubeconfig save shared-dev
-```
-~Use this command to switch k8s config between clusters when working with different environments
 
-#### Apply all remaining infrstructure terraform config deltas (you'll do this often when changing them):
-```sh
-cd .ci_cd/digital_ocean/live/dev/cluster
+# human do this: Go into the digital ocean dashboard, container registry, click edit and enable integration for the newly created k8s cluster
+
 terragrunt apply
+
+# if a new loadbalancer was created (first time you deploy this env), you need to point a DNS record at it now
 ```
 
 #### If a cluster is nuked and volumes are left orphaned, you can import them:

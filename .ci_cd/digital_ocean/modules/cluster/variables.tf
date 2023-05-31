@@ -1,10 +1,15 @@
-variable "project_name" {
-  description = "The project name to use"
+variable "state_bucket" {
+  description = "S3 (aka Spaces) bucket to store the terraform state in"
   type        = string
 }
 
-variable "description" {
-  description = "Description for the DigitalOcean project"
+variable "instance_type" {
+  description = "Type of host resources to spawn for the kubernetes cluster"
+  type        = string
+}
+
+variable "region" {
+  description = "DO region for the host resources to spawn within"
   type        = string
 }
 
@@ -36,11 +41,6 @@ variable "pvt_key" {
 
 variable "frontend_hostname" {
   description = "The web dns name of our front end website"
-  type        = string
-}
-
-variable "certificate_id" {
-  description = "The uuid of the DO certificate to use in terminating SSL"
   type        = string
 }
 

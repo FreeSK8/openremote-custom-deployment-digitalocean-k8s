@@ -1,12 +1,12 @@
 resource "digitalocean_kubernetes_cluster" "primary" {
   name   = var.cluster_name
-  region = "nyc1"
+  region = var.region
   # Grab the latest version slug from `doctl kubernetes options versions`
   version = "1.27.2-do.0"
 
   node_pool {
-    name       = "shared"
-    size       = "s-2vcpu-2gb"
+    name       = "${var.environment}-sk8net-web"
+    size       = var.instance_type
     node_count = var.node_count
   }
 }

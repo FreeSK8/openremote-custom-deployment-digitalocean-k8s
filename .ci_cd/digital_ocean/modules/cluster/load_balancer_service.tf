@@ -1,15 +1,3 @@
-/*
-resource "kubernetes_config_map" "load_balancer" {
-  metadata {
-    name = "load_balancer"
-  }
-  data = {
-    "80" = "default/haproxy:8080"
-    "443" = "default/haproxy:8443"
-    "8883" = "default/haproxy:8883"
-  }
-}*/
-
 resource "kubernetes_service" "load_balancer" {
   metadata {
     name = "load-balancer"
