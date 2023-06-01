@@ -29,7 +29,7 @@ resource "kubernetes_stateful_set" "web" {
             "/bin/sh",
             "-c",
             <<-EOT
-              /bin/mkdir -p /deployment/manager && \
+              /bin/mkdir -p /deployment/manager/app && \
               /bin/chmod -R 777 /deployment && \
               /bin/chmod -R 777 /manager
             EOT
@@ -96,7 +96,7 @@ resource "kubernetes_stateful_set" "web" {
           }
         }
         container {
-          image = "registry.digitalocean.com/sk8net/openremote/manager:may25test00"
+          image = "registry.digitalocean.com/sk8net/openremote/manager:may25test02"
           name = "manager"
           port {
             container_port = 8090
@@ -149,6 +149,10 @@ resource "kubernetes_stateful_set" "web" {
           env {
             name = "OR_KEYCLOAK_PORT"
             value = "8080"
+          }
+          env {
+            name = "OR_MAP_TILES_PATH"
+            value = "/opt/map/mapdata.mbtiles"
           }
         }
         termination_grace_period_seconds = 10
