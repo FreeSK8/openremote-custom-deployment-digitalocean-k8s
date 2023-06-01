@@ -76,13 +76,14 @@ doctl registry login
 
 ##### Build a docker image
 ```sh
+export MANAGER_VERSION="${commit_hash}"
 docker build -t openremote/manager:$MANAGER_VERSION ./openremote/manager/build/install/manager/
 ```
 
 #### Tag a deployment and push to DO docker repo
 ```sh
-docker tag openremote/manager:{target version hash} registry.digitalocean.com/sk8net/openremote/manager
-docker push registry.digitalocean.com/sk8net/openremote/manager
+docker tag openremote/manager:$MANAGER_VERSION registry.digitalocean.com/sk8net/openremote/manager:$MANAGER_VERSION
+docker push registry.digitalocean.com/sk8net/openremote/manager:$MANAGER_VERSION
 ```
 
 ## Deployment
