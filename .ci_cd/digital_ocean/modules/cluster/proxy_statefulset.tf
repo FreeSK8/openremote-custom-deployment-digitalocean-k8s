@@ -4,6 +4,7 @@ resource "kubernetes_stateful_set" "proxy" {
     namespace = "frontend"
     labels = {
       web_dependency = kubernetes_stateful_set.web.metadata.0.name
+      loadbalancer_dependency = kubernetes_service.load_balancer.metadata.0.name
     }
   }
   spec {
