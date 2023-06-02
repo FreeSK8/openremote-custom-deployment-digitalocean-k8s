@@ -4,13 +4,6 @@ generate "backend" {
   if_exists = "overwrite_terragrunt"
   contents = <<EOF
 terraform {
-  required_providers {
-    digitalocean = {
-      source = "digitalocean/digitalocean"
-      version = "~> 2.8.0"
-    }
-  }
- 
   backend "s3" {
     skip_credentials_validation = true
     skip_metadata_api_check     = true

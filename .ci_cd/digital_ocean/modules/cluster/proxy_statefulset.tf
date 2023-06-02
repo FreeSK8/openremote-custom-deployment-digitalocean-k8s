@@ -37,7 +37,7 @@ resource "kubernetes_stateful_set" "proxy" {
           }
         }
         container {
-          image = "${container_registry}/openremote/proxy:${var.proxy_image_hash}"
+          image = "${var.container_registry}/openremote/proxy:${var.proxy_image_hash}"
           name = "haproxy"
           volume_mount {
             mount_path = "/deployment"
