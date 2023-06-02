@@ -98,11 +98,12 @@ doctl registry login
 ##### Build & push the proxy image that was adjusted for the DigitalOcean & k8s architecture
 Clone the special proxy repo and build it separately from this project:
 ```sh
-pushd ../ && git clone git@github.com:FreeSK8/sk8net_proxy.git && cd
+pushd ../ && git clone git@github.com:FreeSK8/sk8net_proxy.git && pushd sk8net_proxy
 export PROXY_VERSION=latest
 docker build -t openremote/custom-deployment:$PROXY_VERSION ./deployment/build/
 docker tag openremote/custom-deployment:$PROXY_VERSION registry.digitalocean.com/openremote/openremote/custom-deployment:$PROXY_VERSION
 docker push registry.digitalocean.com/openremote/openremote/custom-deployment:$PROXY_VERSION
+popd && popd
 ```
 
 ##### Build & push a your project customizations via Deployment docker image
