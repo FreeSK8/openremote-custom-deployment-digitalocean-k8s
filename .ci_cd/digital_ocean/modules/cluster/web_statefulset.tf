@@ -23,17 +23,8 @@ resource "kubernetes_stateful_set" "web" {
       }
       spec {
         init_container {
-          name = "mounts-perms-fix"
-          image = "busybox"
-          command = [
-            "/bin/sh",
-            "-c",
-            <<-EOT
-              /bin/mkdir -p /deployment/manager/app && \
-              /bin/chmod -R 777 /deployment && \
-              /bin/chmod -R 777 /manager
-            EOT
-          ]
+          name = "customize-openremote-deployment"
+          image = "${var.container_registry}/openremote/custom-deployment:${var.custom_deployment_hash}"
           volume_mount {
             mount_path = "/deployment"
             name = "deployment-data"
@@ -42,6 +33,15 @@ resource "kubernetes_stateful_set" "web" {
             mount_path = "/manager"
             name = "manager-data"
           }
+          command = [
+            "/bin/sh",
+            "-c",
+            <<-EOT
+              cp -r /deployment-source/* /deployment/ && \
+              /bin/chmod -R 777 /deployment && \
+              /bin/chmod -R 777 /manager
+            EOT
+          ]
         }
         container {
           image = "openremote/keycloak:latest"
@@ -76,7 +76,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "KC_DB_URL_HOST"
-            value = "postgresql.backend"
+            value = "postgresql.backend.svc.cluster.local"
           }
           env {
             name = "KC_HOSTNAME_STRICT_HTTPS"
@@ -87,16 +87,12 @@ resource "kubernetes_stateful_set" "web" {
             value = "edge"
           }
           env {
-            name = "KC_DB_URL"
-            value = "jdbc:postgresql://postgresql.backend:5432/openremote?currentSchema=public"
-          }
-          env {
             name = "PROXY_ADDRESS_FORWARDING"
             value = "true"
           }
         }
         container {
-          image = "registry.digitalocean.com/sk8net/openremote/manager:may25test02"
+          image = "openremote/manager:latest"
           name = "manager"
           port {
             container_port = 8090
@@ -116,7 +112,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "OR_DB_HOST"
-            value = "postgresql.backend"
+            value = "postgresql.backend.svc.cluster.local"
           }
           env {
             name = "OR_ADMIN_PASSWORD"
@@ -144,7 +140,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "OR_KEYCLOAK_HOST"
-            value = "web.default"
+            value = "web.default.svc.cluster.local"
           }
           env {
             name = "OR_KEYCLOAK_PORT"
@@ -152,7 +148,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           env {
             name = "OR_MAP_TILES_PATH"
-            value = "/opt/map/mapdata.mbtiles"
+            value = "/deployment/map/mapdata.mbtiles"
           }
         }
         termination_grace_period_seconds = 10

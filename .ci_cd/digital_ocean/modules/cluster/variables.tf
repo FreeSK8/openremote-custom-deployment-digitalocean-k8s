@@ -48,3 +48,7 @@ variable "loadbalancer_friendly_name" {
   description = "The label for the load balancer"
   type        = string
 }
+
+variable "manager_deployment_hash" {}
+variable "custom_deployment_hash" {}
+variable "container_registry" {}

@@ -3,5 +3,5 @@
 # ----------------------------------------------------------------------------------------
 FROM alpine:latest
 
-RUN mkdir -p /deployment/manager/extensions
-ADD image /deployment
+RUN mkdir -p /deployment-source/manager/extensions
+ADD image /deployment-source

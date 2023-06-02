@@ -11,4 +11,7 @@ inputs = {
   frontend_hostname = "stage.ride.sk8net.org"
   loadbalancer_friendly_name = "stage-fronted-proxy-sk8net"
   state_bucket = "sk8net-terraform-states"
+  container_registry = "registry.digitalocean.com/sk8net"
+  manager_deployment_hash = "73a6f457c"
+  custom_deployment_hash = "30bb6d5"
 }
