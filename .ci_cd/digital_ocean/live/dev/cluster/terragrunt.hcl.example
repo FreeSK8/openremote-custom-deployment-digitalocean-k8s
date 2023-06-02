@@ -1,0 +1,22 @@
+terraform {
+  source = "../../../modules/cluster"
+}
+
+inputs = {
+  region = "nyc3"
+  instance_type = "s-1vcpu-2gb"
+  pvt_key = "~/.ssh/id_rsa"
+  cluster_name = "shared-dev"
+  environment = "development"
+  node_count = 2
+  frontend_hostname = "openremote-frontend.mysite.org"
+  loadbalancer_friendly_name = "dev-fronted-proxy-mysite"
+  container_registry = "registry.digitalocean.com/mysite"
+  custom_deployment_hash = "xxxx"
+  proxy_image_hash = "latest"
+}
+
+include "root" {
+  # setup backend config with dynamic state key/path selection
+  path = find_in_parent_folders()
+}
