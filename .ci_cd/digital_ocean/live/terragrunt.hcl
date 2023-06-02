@@ -1,3 +1,8 @@
+
+generate "backend" {
+  path      = "backend.tf"
+  if_exists = "overwrite_terragrunt"
+  contents = <<EOF
 terraform {
   required_providers {
     digitalocean = {
@@ -11,15 +16,9 @@ terraform {
     skip_metadata_api_check     = true
     endpoint                    = "https://nyc3.digitaloceanspaces.com"
     region                      = "us-east-1" // needed
-    bucket                      = "sk8net-terraform-states" // name of your space
-    key                         = "infrastructure/terraform.tfstate"
+    bucket                      = "openremote-terraform-states"
+    key                         = "${path_relative_to_include()}/terraform.tfstate"
   }
 }
-
-provider "digitalocean" {
-  token = var.do_token
-}
-
-provider "kubernetes" {
-  config_path = "~/.kube/config"
+EOF
 }

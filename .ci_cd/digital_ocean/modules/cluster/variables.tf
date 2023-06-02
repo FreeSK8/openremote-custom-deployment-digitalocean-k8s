@@ -1,7 +1,3 @@
-variable "state_bucket" {
-  description = "S3 (aka Spaces) bucket to store the terraform state in"
-  type        = string
-}
 
 variable "instance_type" {
   description = "Type of host resources to spawn for the kubernetes cluster"
