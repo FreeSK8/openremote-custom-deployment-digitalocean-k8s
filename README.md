@@ -100,9 +100,9 @@ Clone the special proxy repo and build it separately from this project:
 ```sh
 pushd ../ && git clone git@github.com:FreeSK8/sk8net_proxy.git && pushd sk8net_proxy
 export PROXY_VERSION=latest
-docker build -t openremote/custom-deployment:$PROXY_VERSION ./deployment/build/
-docker tag openremote/custom-deployment:$PROXY_VERSION registry.digitalocean.com/openremote/openremote/custom-deployment:$PROXY_VERSION
-docker push registry.digitalocean.com/openremote/openremote/custom-deployment:$PROXY_VERSION
+docker build -t openremote/proxy:$PROXY_VERSION ./deployment/build/
+docker tag openremote/proxy:$PROXY_VERSION registry.digitalocean.com/openremote/openremote/proxy:$PROXY_VERSION
+docker push registry.digitalocean.com/openremote/openremote/proxy:$PROXY_VERSION
 popd && popd
 ```
 
