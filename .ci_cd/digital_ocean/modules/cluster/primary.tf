@@ -11,6 +11,11 @@ resource "digitalocean_kubernetes_cluster" "primary" {
   }
 }
 
+resource "digitalocean_container_registry" "openremote" {
+  name                   = element(split("/", var.container_registry), 1)
+  subscription_tier_slug = "basic"
+}
+
 resource "kubernetes_namespace" "backend" {
   metadata {
     labels = {

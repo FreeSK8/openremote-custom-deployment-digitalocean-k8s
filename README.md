@@ -85,11 +85,6 @@ doctl auth init -t $(pass openremote/do_token)
 
 ## Docker image pipeline
 
-##### (one time only, completed) create Sk8net docker image registry at digitalocean
-```sh
-doctl registry create openremote
-```
-
 ##### DigitalOcean docker registry login
 ```sh
 doctl registry login

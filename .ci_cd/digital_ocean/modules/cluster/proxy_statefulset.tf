@@ -59,6 +59,15 @@ resource "kubernetes_stateful_set" "proxy" {
             container_port = 8883
             name = "mqtt-haproxy"
           }
+          readiness_probe {
+            http_get {
+              path   = "/health-check"
+              port   = 8080
+            }
+
+            initial_delay_seconds = 30
+            timeout_seconds       = 30
+          }
           env {
             name = "MANAGER_HOST"
             value = "web.default.svc.cluster.local"

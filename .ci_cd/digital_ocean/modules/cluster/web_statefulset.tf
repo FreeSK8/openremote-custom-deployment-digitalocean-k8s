@@ -50,6 +50,15 @@ resource "kubernetes_stateful_set" "web" {
             container_port = 8080
             name = "http-keycloak"
           }
+          readiness_probe {
+            http_get {
+              path   = "/auth/health/ready"
+              port   = 8080
+            }
+
+            initial_delay_seconds = 30
+            timeout_seconds       = 30
+          }
           volume_mount {
             mount_path = "/deployment"
             name = "deployment-data"
