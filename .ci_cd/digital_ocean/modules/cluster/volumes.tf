@@ -1,7 +1,7 @@
 resource "digitalocean_volume" "postgresql_data" {
   region                  = var.region
   name                    = "${var.environment}-openremote-postgresql"
-  size                    = 5
+  size                    = var.pgsql_size_gb
 }
 
 resource "kubernetes_persistent_volume" "postgresql_data" {
@@ -13,7 +13,7 @@ resource "kubernetes_persistent_volume" "postgresql_data" {
   }
   spec {
     capacity = {
-      storage = "5Gi"
+      storage = "${var.pgsql_size_gb}Gi"
     }
     access_modes = [
       "ReadWriteOnce",
@@ -33,9 +33,9 @@ resource "kubernetes_persistent_volume" "postgresql_data" {
 }
 
 resource "digitalocean_volume" "manager_data" {
-  region                  = var.region
-  name                    = "${var.environment}-openremote-manager"
-  size                    = 5
+  region = var.region
+  name   = "${var.environment}-openremote-manager"
+  size   = var.manager_size_gb
 }
 
 resource "kubernetes_persistent_volume" "manager_data" {
@@ -47,7 +47,7 @@ resource "kubernetes_persistent_volume" "manager_data" {
   }
   spec {
     capacity = {
-      storage = "5Gi"
+      storage = "${var.manager_size_gb}Gi"
     }
     access_modes = [
       "ReadWriteOnce",
@@ -67,9 +67,9 @@ resource "kubernetes_persistent_volume" "manager_data" {
 }
 
 resource "digitalocean_volume" "deployment_data" {
-  region                  = var.region
-  name                    = "${var.environment}-openremote-deployment"
-  size                    = 5
+  region = var.region
+  name   = "${var.environment}-openremote-deployment"
+  size   = var.deployment_size_gb
 }
 
 resource "kubernetes_persistent_volume" "deployment_data" {
@@ -81,7 +81,7 @@ resource "kubernetes_persistent_volume" "deployment_data" {
   }
   spec {
     capacity = {
-      storage = "5Gi"
+      storage = "${var.deployment_size_gb}Gi"
     }
     storage_class_name = "do-block-storage"
     access_modes = [
@@ -100,11 +100,10 @@ resource "kubernetes_persistent_volume" "deployment_data" {
   }
 }
 
-
 resource "digitalocean_volume" "proxy_data" {
-  region                  = var.region
-  name                    = "${var.environment}-openremote-proxy"
-  size                    = 5
+  region = var.region
+  name   = "${var.environment}-openremote-proxy"
+  size   = var.proxy_size_gb
 }
 
 resource "kubernetes_persistent_volume" "proxy_data" {
@@ -116,7 +115,7 @@ resource "kubernetes_persistent_volume" "proxy_data" {
   }
   spec {
     capacity = {
-      storage = "5Gi"
+      storage = "${var.proxy_size_gb}Gi"
     }
     storage_class_name = "do-block-storage"
     access_modes = [

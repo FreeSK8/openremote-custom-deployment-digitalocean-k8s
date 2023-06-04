@@ -48,3 +48,23 @@ variable "loadbalancer_friendly_name" {
 variable "custom_deployment_hash" {}
 variable "proxy_image_hash" {}
 variable "container_registry" {}
+
+variable "deployment_size_gb" {
+  description = "Size of the deployment-data persistent volume in GiB"
+  type        = number
+}
+
+variable "manager_size_gb" {
+  description = "Size of the manager-data persistent volume in GiB"
+  type        = number
+}
+
+variable "proxy_size_gb" {
+  description = "Size of the proxy-data persistent volume in GiB"
+  type        = number
+}
+
+variable "pgsql_size_gb" {
+  description = "Size of the postgresql-data persistent volume in GiB"
+  type        = number
+}
