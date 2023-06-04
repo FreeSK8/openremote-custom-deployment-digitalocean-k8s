@@ -103,6 +103,7 @@ popd && popd
 
 ##### Build & push a your project customizations via Deployment docker image
 ```sh
+./gradlew clean installDist
 export DEPLOYMENT_VERSION=$(git rev-parse --short HEAD)
 docker build -t openremote/custom-deployment:$DEPLOYMENT_VERSION ./deployment/build/
 docker tag openremote/custom-deployment:$DEPLOYMENT_VERSION registry.digitalocean.com/openremote/openremote/custom-deployment:$DEPLOYMENT_VERSION

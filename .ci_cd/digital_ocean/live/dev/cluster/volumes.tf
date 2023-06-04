@@ -1,8 +1,7 @@
 resource "digitalocean_volume" "postgresql_data" {
   region                  = var.region
-  name                    = "postgresql-data"
+  name                    = "${var.environment}-openremote-postgresql"
   size                    = 5
-  description             = "Kubernetes storage volume for pgsql"
 }
 
 resource "kubernetes_persistent_volume" "postgresql_data" {
@@ -35,9 +34,8 @@ resource "kubernetes_persistent_volume" "postgresql_data" {
 
 resource "digitalocean_volume" "manager_data" {
   region                  = var.region
-  name                    = "manager-data"
+  name                    = "${var.environment}-openremote-manager"
   size                    = 5
-  description             = "Kubernetes storage volume for openremote manager"
 }
 
 resource "kubernetes_persistent_volume" "manager_data" {
@@ -70,9 +68,8 @@ resource "kubernetes_persistent_volume" "manager_data" {
 
 resource "digitalocean_volume" "deployment_data" {
   region                  = var.region
-  name                    = "deployment-data"
+  name                    = "${var.environment}-openremote-deployment"
   size                    = 5
-  description             = "Kubernetes storage volume for keycloak"
 }
 
 resource "kubernetes_persistent_volume" "deployment_data" {
@@ -106,9 +103,8 @@ resource "kubernetes_persistent_volume" "deployment_data" {
 
 resource "digitalocean_volume" "proxy_data" {
   region                  = var.region
-  name                    = "proxy-data"
+  name                    = "${var.environment}-openremote-proxy"
   size                    = 5
-  description             = "Kubernetes storage volume for keycloak"
 }
 
 resource "kubernetes_persistent_volume" "proxy_data" {

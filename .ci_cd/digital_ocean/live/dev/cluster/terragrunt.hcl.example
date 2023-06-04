@@ -6,12 +6,12 @@ inputs = {
   region = "nyc3"
   instance_type = "s-1vcpu-2gb"
   pvt_key = "~/.ssh/id_rsa"
-  cluster_name = "shared-dev"
-  environment = "development"
+  cluster_name = "openremote-dev"
+  environment = "dev"
   node_count = 2
   frontend_hostname = "openremote-frontend.mysite.org"
-  loadbalancer_friendly_name = "dev-fronted-proxy-mysite"
-  container_registry = "registry.digitalocean.com/mysite"
+  loadbalancer_friendly_name = "dev-fronted-proxy-openremote"
+  container_registry = "registry.digitalocean.com/openremote"
   custom_deployment_hash = "xxxx"
   proxy_image_hash = "latest"
 }

@@ -5,7 +5,7 @@ resource "digitalocean_kubernetes_cluster" "primary" {
   version = "1.27.2-do.0"
 
   node_pool {
-    name       = "${var.environment}-sk8net-web"
+    name       = "${var.environment}-openremote-web"
     size       = var.instance_type
     node_count = var.node_count
   }
