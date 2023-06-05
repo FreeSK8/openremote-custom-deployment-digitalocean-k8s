@@ -31,6 +31,11 @@ resource "kubernetes_stateful_set" "pgsql" {
         container {
           image = "openremote/postgresql:latest"
           name = "postgresql"
+          resources {
+            requests = {
+              cpu = "102m"
+            }
+          }
           volume_mount {
             mount_path = "/var/lib/postgresql"
             name = "postgresql-data"

@@ -50,6 +50,14 @@ resource "kubernetes_stateful_set" "web" {
             container_port = 8080
             name = "http-keycloak"
           }
+          resources {
+            limits = {
+              cpu = "250m"
+            }
+            requests = {
+              cpu = "51m"
+            }
+          }
           readiness_probe {
             http_get {
               path   = "/auth/health/ready"
@@ -103,6 +111,14 @@ resource "kubernetes_stateful_set" "web" {
         container {
           image = "openremote/manager:latest"
           name = "manager"
+          resources {
+            limits = {
+              cpu = "300m"
+            }
+            requests = {
+              cpu = "51m"
+            }
+          }
           port {
             container_port = 8090
             name = "http-manager"
