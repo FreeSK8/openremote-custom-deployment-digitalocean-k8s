@@ -38,8 +38,10 @@ resource "kubernetes_stateful_set" "web" {
             "-c",
             <<-EOT
               cp -r /deployment-source/* /deployment/ && \
-              /bin/chmod -R 777 /deployment && \
-              /bin/chmod -R 777 /manager
+              /bin/chmod -R 700 /deployment && \
+              /bin/chown -R 185 /deployment && \
+              /bin/chmod -R 700 /manager && \
+              /bin/chown -R 185 /manager
             EOT
           ]
         }
@@ -52,7 +54,7 @@ resource "kubernetes_stateful_set" "web" {
           }
           resources {
             limits = {
-              cpu = "250m"
+              cpu = "400m"
             }
             requests = {
               cpu = "51m"
@@ -113,7 +115,7 @@ resource "kubernetes_stateful_set" "web" {
           name = "manager"
           resources {
             limits = {
-              cpu = "300m"
+              cpu = "400m"
             }
             requests = {
               cpu = "51m"
